@@ -18,41 +18,64 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-//todas las apis
-Route::apiResource('categorias','App\Http\Controllers\BusquedaUsuarioController');
-Route::apiResource('paises','App\Http\Controllers\CarritoProductoController');
+Route::post('users','App\Http\Controllers\UsuarioController@store');
+Route::post('login','App\Http\Controllers\UsuarioController@login');
+
+//apis publicas
+Route::group(['prefix' => 'v1'], function () {
+   
+Route::apiResource('busquedasusuario','App\Http\Controllers\BusquedaUsuarioController');
+Route::apiResource('userreviews','App\Http\Controllers\UserReviewController');
+Route::apiResource('posicionamientos','App\Http\Controllers\PosicionamientoController');
+Route::apiResource('meinteresan','App\Http\Controllers\MeInteresaProductoController');
+Route::apiResource('ofertas','App\Http\Controllers\OfertaController');
+Route::apiResource('paises','App\Http\Controllers\PaisController');
+Route::apiResource('idiomas','App\Http\Controllers\IdiomaController');
+Route::apiResource('imgpath','App\Http\Controllers\ImagePathController');
+Route::apiResource('infoproduct','App\Http\Controllers\InformacionProductoController');
+Route::apiResource('fichastecnicas','App\Http\Controllers\FichaTecnicaController');
+Route::apiResource('direcciones','App\Http\Controllers\DireccionController');
+Route::apiResource('estados','App\Http\Controllers\EstadoController');
 Route::apiResource('categorias','App\Http\Controllers\CategoriaController');
-Route::apiResource('paises','App\Http\Controllers\CategoriaPosicionamientoController');
-Route::apiResource('categorias','App\Http\Controllers\CategoriaVendedorController');
-Route::apiResource('paises','App\Http\Controllers\CiudadController');
-Route::apiResource('categorias','App\Http\Controllers\ClienteController');
-Route::apiResource('paises','App\Http\Controllers\ComentarioController');
-Route::apiResource('categorias','App\Http\Controllers\CompraReclamoController');
-Route::apiResource('paises','App\Http\Controllers\DireccionController');
-Route::apiResource('categorias','App\Http\Controllers\EstadoController');
-Route::apiResource('paises','App\Http\Controllers\FacturaController');
-Route::apiResource('categorias','App\Http\Controllers\FacturaDetalleController');
-Route::apiResource('paises','App\Http\Controllers\FichaTecnicaController');
-Route::apiResource('categorias','App\Http\Controllers\FormaPagoController');
-Route::apiResource('paises','App\Http\Controllers\IdiomaController');
-Route::apiResource('categorias','App\Http\Controllers\ImagePathController');
-Route::apiResource('paises','App\Http\Controllers\InformacionProductoController');
-Route::apiResource('categorias','App\Http\Controllers\KeywordController');
-Route::apiResource('paises','App\Http\Controllers\KeywordProductController');
-Route::apiResource('categorias','App\Http\Controllers\MeInteresaProductoController');
-Route::apiResource('paises','App\Http\Controllers\OfertaController');
-Route::apiResource('categorias','App\Http\Controllers\PaisController');
-Route::apiResource('paises','App\Http\Controllers\PasswordResetController');
-Route::apiResource('categorias','App\Http\Controllers\PosicionamientoController');
-Route::apiResource('paises','App\Http\Controllers\ProductoController');
-Route::apiResource('categorias','App\Http\Controllers\ProductoPreguntaController');
-Route::apiResource('paises','App\Http\Controllers\ProductoRespuestaController');
-Route::apiResource('categorias','App\Http\Controllers\ProductoVendidoController');
-Route::apiResource('paises','App\Http\Controllers\SoporteTicketController');
-Route::apiResource('categorias','App\Http\Controllers\SoporteTipoController');
-Route::apiResource('paises','App\Http\Controllers\TipoReclamoController');
-Route::apiResource('categorias','App\Http\Controllers\UserReviewController');
-Route::apiResource('paises','App\Http\Controllers\UsuarioController');
-Route::apiResource('categorias','App\Http\Controllers\VendedorController');
-Route::apiResource('paises','App\Http\Controllers\VentaController');
-Route::apiResource('categorias','App\Http\Controllers\VentaPagoController');
+Route::apiResource('categoriasposicionamiento','App\Http\Controllers\CategoriaPosicionamientoController');
+});
+
+//apis privadas
+Route::group(['prefix' => 'v2'], function () {
+    Route::apiResource('carritoproducto','App\Http\Controllers\CarritoProductoController');
+
+    Route::apiResource('categoriasvendedor','App\Http\Controllers\CategoriaVendedorController');
+    Route::apiResource('ciudades','App\Http\Controllers\CiudadController');
+    Route::apiResource('clientes','App\Http\Controllers\ClienteController');
+    Route::apiResource('comentarios','App\Http\Controllers\ComentarioController');
+    Route::apiResource('comprareclamos','App\Http\Controllers\CompraReclamoController');
+
+    Route::apiResource('facturas','App\Http\Controllers\FacturaController');
+    Route::apiResource('facturadetalles','App\Http\Controllers\FacturaDetalleController');
+
+    Route::apiResource('formaspago','App\Http\Controllers\FormaPagoController');
+
+
+    Route::apiResource('productos','App\Http\Controllers\ProductoController');
+    Route::apiResource('productopreguntas','App\Http\Controllers\ProductoPreguntaController');
+    Route::apiResource('productorespuestas','App\Http\Controllers\ProductoRespuestaController');
+    Route::apiResource('productosvendidos','App\Http\Controllers\ProductoVendidoController');
+    Route::apiResource('soportetickets','App\Http\Controllers\SoporteTicketController');
+    Route::apiResource('soportetipos','App\Http\Controllers\SoporteTipoController');
+    Route::apiResource('tiposreclamo','App\Http\Controllers\TipoReclamoController');
+
+
+    Route::apiResource('vendedores','App\Http\Controllers\VendedorController');
+    Route::apiResource('ventas','App\Http\Controllers\VentaController');
+    Route::apiResource('ventapago','App\Http\Controllers\VentaPagoController');
+
+    Route::apiResource('keyws','App\Http\Controllers\KeywordController');
+    Route::apiResource('keywsproduct','App\Http\Controllers\KeywordProductController');
+
+    Route::apiResource('passwreset','App\Http\Controllers\PasswordResetController');
+
+});
+
+Route::group(['middleware' => ['auth:api']], function () {
+    Route::ApiResource('keyws', 'App\Http\Controllers\KeywordController');
+});

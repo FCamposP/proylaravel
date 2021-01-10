@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Idioma;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Http\Request;
 
 class IdiomaController extends Controller
@@ -15,6 +16,10 @@ class IdiomaController extends Controller
     public function index()
     {
         //
+        $idiomas=Idioma::all();
+        $response=Response::json($idiomas,200);
+        return $response;
+
     }
 
     /**

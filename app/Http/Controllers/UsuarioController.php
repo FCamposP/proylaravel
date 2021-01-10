@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Usuario;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class UsuarioController extends Controller
 {
@@ -16,6 +18,8 @@ class UsuarioController extends Controller
     {
         //
     }
+
+
 
     /**
      * Show the form for creating a new resource.
@@ -35,7 +39,13 @@ class UsuarioController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $input=$request->all();
+        $input['password']=Hash::make($request->password);
+        User::create($input);
+        return response()->json([
+            'res'=>true,
+            'message'=>'Usuario creado correctamente',
+        ],200);
     }
 
     /**
@@ -44,7 +54,7 @@ class UsuarioController extends Controller
      * @param  \App\Models\Usuario  $usuario
      * @return \Illuminate\Http\Response
      */
-    public function show(Usuario $usuario)
+    public function show(User $usuario)
     {
         //
     }
@@ -55,7 +65,7 @@ class UsuarioController extends Controller
      * @param  \App\Models\Usuario  $usuario
      * @return \Illuminate\Http\Response
      */
-    public function edit(Usuario $usuario)
+    public function edit(User $usuario)
     {
         //
     }
@@ -67,7 +77,7 @@ class UsuarioController extends Controller
      * @param  \App\Models\Usuario  $usuario
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Usuario $usuario)
+    public function update(Request $request, User $usuario)
     {
         //
     }
@@ -78,8 +88,32 @@ class UsuarioController extends Controller
      * @param  \App\Models\Usuario  $usuario
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Usuario $usuario)
+    public function destroy(User $usuario)
     {
         //
+    }
+
+    public function login(Request $request){
+        
+        $user=User::whereEmail($request->email)->first();
+        if(!is_null($user)&& Hash::check($request->password,$user->password)){
+            $token=$user->createToken('angular')->accessToken;
+            
+            $cad =strval($token);
+            $user->api_token=$cad;
+            $user->save();
+            return response()->json([
+                'res'=>true,
+                'token'=>$cad,
+                'message'=>'Bienvenido al sistema'    
+            ], 200);
+        }else{
+            return response()->json([
+                'res'=>false,
+                'message'=>'Datos incorrectos'    
+            ], 200);
+        }
+
+
     }
 }

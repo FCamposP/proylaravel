@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Keyword;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 
 class KeywordController extends Controller
 {
@@ -15,6 +16,9 @@ class KeywordController extends Controller
     public function index()
     {
         //
+        $keys=Keyword::all();
+        $response=Response::json($keys,200);
+        return $response;
     }
 
     /**
