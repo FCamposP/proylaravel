@@ -98,12 +98,13 @@ class UsuarioController extends Controller
         $user=User::whereEmail($request->email)->first();
         if(!is_null($user)&& Hash::check($request->password,$user->password)){
             $token=$user->createToken('angular')->accessToken;
-            
+          
             $cad =strval($token);
             $user->api_token=$cad;
             $user->save();
             return response()->json([
                 'res'=>true,
+                'user'=>$user,
                 'token'=>$cad,
                 'message'=>'Bienvenido al sistema'    
             ], 200);
@@ -115,5 +116,12 @@ class UsuarioController extends Controller
         }
 
 
+    }
+
+    public function me(){
+        return response()->json([
+            'ok'=>true,
+            'user'=> User::user()
+        ]);
     }
 }

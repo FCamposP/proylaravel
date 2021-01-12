@@ -14,6 +14,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+//apis de chat
+Route::post('message/send','App\Http\Controllers\Api\MessageController@send')->middleware('auth:api');
+// Route::post('message/sendDM','App\Http\Controllers\Api\MessageController@sendDM')->middleware('auth:api');
+Route::post('message/sendDM', 'App\Http\Controllers\Api\MessageController@sendDM')
+    ->name('api.message.sendDM')
+    ->middleware('auth:api');
+
+
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
@@ -77,5 +86,9 @@ Route::group(['prefix' => 'v2'], function () {
 });
 
 Route::group(['middleware' => ['auth:api']], function () {
+
+    //auth
+    
+
     Route::ApiResource('keyws', 'App\Http\Controllers\KeywordController');
 });
